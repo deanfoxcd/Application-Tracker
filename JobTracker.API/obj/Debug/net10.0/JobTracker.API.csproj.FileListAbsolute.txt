@@ -145,3 +145,4 @@
 /Users/deanfox/Desktop/Coding/Personal Projects/JobTracker/JobTracker.API/obj/Debug/net10.0/JobTracker.API.pdb
 /Users/deanfox/Desktop/Coding/Personal Projects/JobTracker/JobTracker.API/obj/Debug/net10.0/JobTracker.API.genruntimeconfig.cache
 /Users/deanfox/Desktop/Coding/Personal Projects/JobTracker/JobTracker.API/obj/Debug/net10.0/ref/JobTracker.API.dll
+/Users/deanfox/Desktop/Coding/Personal Projects/JobTracker/JobTracker.API/obj/Debug/net10.0/JobTracker.API.sourcelink.json
