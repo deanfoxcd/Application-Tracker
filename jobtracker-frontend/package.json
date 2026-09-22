@@ -1,5 +1,5 @@
 {
-  "name": "jobtracker-web",
+  "name": "jobtracker-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -41,7 +41,6 @@
     "@types/react-dom": "^19.3.0",
     "autoprefixer": "^10.6.1",
     "postcss": "^8.5.28",
-    "tailwindcss": "^4.3.3",
-    "typescript": "^4.9.5"
+    "tailwindcss": "^4.3.3"
   }
 }
