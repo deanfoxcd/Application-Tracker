@@ -2,13 +2,21 @@ import { ChangeEvent, SubmitEvent, useEffect, useState } from 'react';
 import { Application } from '../../../types/Application';
 import { createApplication, fetchApplications } from '../services/applicationService';
 
+const getLocalDateString = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const useApplications = () => {
   const [loading, setLoading] = useState(true);
   const [applications, setApplications] = useState<Application[]>([]);
   const [formData, setFormData] = useState({
     companyName: '',
     position: '',
-    dateApplied: new Date().toISOString().split('T')[0],
+    dateApplied: getLocalDateString(),
     jobUrl: '',
   });
 
@@ -33,7 +41,7 @@ export const useApplications = () => {
       setFormData({
         companyName: '',
         position: '',
-        dateApplied: new Date().toISOString().split('T')[0],
+        dateApplied: getLocalDateString(),
         jobUrl: '',
       });
       const data = await fetchApplications();
