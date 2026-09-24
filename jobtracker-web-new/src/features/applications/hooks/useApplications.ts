@@ -1,6 +1,11 @@
 import { ChangeEvent, SubmitEvent, useEffect, useState } from 'react';
-import { Application } from '../../../types/Application';
-import { createApplication, fetchApplications } from '../services/applicationService';
+import { Application, UpdateApplicationInput } from '../../../types/Application';
+import {
+  createApplication,
+  deleteApplication,
+  fetchApplications,
+  updateApplication,
+} from '../services/applicationService';
 
 const getLocalDateString = () => {
   const date = new Date();
@@ -58,5 +63,32 @@ export const useApplications = () => {
     });
   };
 
-  return { applications, loading, formData, handleSubmit, handleChange, refetch };
+  const handleUpdate = async (id: number, data: UpdateApplicationInput) => {
+    try {
+      await updateApplication(id, data);
+      refetch();
+    } catch (error) {
+      console.error('Error updating application:', error);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteApplication(id);
+      refetch();
+    } catch (error) {
+      console.error('Error deleting application:', error);
+    }
+  };
+
+  return {
+    applications,
+    loading,
+    formData,
+    handleSubmit,
+    handleChange,
+    handleUpdate,
+    handleDelete,
+    refetch,
+  };
 };

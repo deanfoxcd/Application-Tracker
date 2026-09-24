@@ -17,7 +17,13 @@ export type CreateApplicationInput = {
   jobUrl?: string
 }
 
-export type UpdateApplicationInput = Partial<CreateApplicationInput>;
+export type UpdateApplicationInput = {
+  companyName: string;
+  position: string;
+  status: string;
+  dateApplied: string;
+  jobUrl?: string;
+};
 
 export type User = {
   id: number;

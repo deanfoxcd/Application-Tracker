@@ -7,8 +7,16 @@ import { useAuth } from './features/auth/context/AuthContext';
 
 function App() {
   const { isAuthenticated, logout } = useAuth();
-  const { applications, loading, formData, handleSubmit, handleChange, refetch } =
-    useApplications();
+  const {
+    applications,
+    loading,
+    formData,
+    handleSubmit,
+    handleChange,
+    handleUpdate,
+    handleDelete,
+    refetch,
+  } = useApplications();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -43,6 +51,8 @@ function App() {
         <ApplicationsList
           applications={applications}
           loading={loading}
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
         />
       </div>
     </div>

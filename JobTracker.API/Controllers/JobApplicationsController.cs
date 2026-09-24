@@ -22,15 +22,17 @@ public class JobApplicationsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<JobApplication>>> GetAll()
     {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var applications = await _service.GetAllAsync();
-        return Ok(applications);
+        return Ok(applications.Where(a => a.UserId == userId));
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<JobApplication>> GetById(int id)
     {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var application = await _service.GetByIdAsync(id);
-        if (application == null)
+        if (application == null || application.UserId != userId)
             return NotFound();
         return Ok(application);
     }
@@ -58,8 +60,9 @@ public class JobApplicationsController : ControllerBase
     {
         try
         {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             var application = await _service.GetByIdAsync(id);
-            if (application == null)
+            if (application == null || application.UserId != userId)
                 return NotFound();
 
             application.CompanyName = dto.CompanyName;
@@ -80,6 +83,10 @@ public class JobApplicationsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var application = await _service.GetByIdAsync(id);
+        if (application == null || application.UserId != userId)
+            return NotFound();
         try
         {
             await _service.DeleteAsync(id);

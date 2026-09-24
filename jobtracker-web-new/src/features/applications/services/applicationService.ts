@@ -1,5 +1,5 @@
 import { apiFetch } from '../../../lib/apiClient';
-import { CreateApplicationInput } from '../../../types/Application';
+import { CreateApplicationInput, UpdateApplicationInput } from '../../../types/Application';
 
 export const fetchApplications = async () => {
   const response = await apiFetch('/api/jobapplications');
@@ -12,4 +12,17 @@ export const createApplication = async (data: CreateApplicationInput) => {
     body: JSON.stringify(data),
   });
   return response.json();
+};
+
+export const updateApplication = async (id: number, data: UpdateApplicationInput) => {
+  await apiFetch(`/api/jobapplications/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+};
+
+export const deleteApplication = async (id: number) => {
+  await apiFetch(`/api/jobapplications/${id}`, {
+    method: 'DELETE',
+  });
 };
