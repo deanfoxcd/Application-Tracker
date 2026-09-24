@@ -1,12 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "OJbZMdNHA2o=",
+  "dgSpecHash": "5iw1EZBBO+U=",
   "success": true,
   "projectFilePath": "/Users/deanfox/Desktop/Coding/Personal Projects/JobTracker/JobTracker.API/JobTracker.API.csproj",
   "expectedPackageFiles": [
     "/Users/deanfox/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/deanfox/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/10.0.12/microsoft.aspnetcore.authentication.jwtbearer.10.0.12.nupkg.sha512",
-    "/Users/deanfox/.nuget/packages/microsoft.aspnetcore.identity/2.3.13/microsoft.aspnetcore.identity.2.3.13.nupkg.sha512",
     "/Users/deanfox/.nuget/packages/microsoft.aspnetcore.openapi/10.0.11/microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
     "/Users/deanfox/.nuget/packages/microsoft.bcl.cryptography/10.0.2/microsoft.bcl.cryptography.10.0.2.nupkg.sha512",
     "/Users/deanfox/.nuget/packages/microsoft.build.framework/18.0.2/microsoft.build.framework.18.0.2.nupkg.sha512",
@@ -49,18 +48,5 @@
     "/Users/deanfox/.nuget/packages/system.composition.typedparts/9.0.0/system.composition.typedparts.9.0.0.nupkg.sha512",
     "/Users/deanfox/.nuget/packages/system.identitymodel.tokens.jwt/8.19.2/system.identitymodel.tokens.jwt.8.19.2.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1510",
-      "level": "Warning",
-      "message": "PackageReference Microsoft.AspNetCore.Identity will not be pruned. This package is automatically available and does not need to be referenced explicitly. Remove the PackageReference item.",
-      "projectPath": "/Users/deanfox/Desktop/Coding/Personal Projects/JobTracker/JobTracker.API/JobTracker.API.csproj",
-      "warningLevel": 1,
-      "filePath": "/Users/deanfox/Desktop/Coding/Personal Projects/JobTracker/JobTracker.API/JobTracker.API.csproj",
-      "libraryId": "Microsoft.AspNetCore.Identity",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }

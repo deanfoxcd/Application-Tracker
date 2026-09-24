@@ -1,0 +1,13 @@
+const API_BASE_URL = 'http://localhost:5160';
+
+export const apiFetch = async (path: string, options: RequestInit = {}) => {
+  const token = localStorage.getItem('token');
+
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...options.headers,
+  };
+
+  return fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+};

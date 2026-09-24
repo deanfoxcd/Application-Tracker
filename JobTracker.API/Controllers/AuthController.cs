@@ -36,6 +36,23 @@ public class AuthController : ControllerBase
         await _context.SaveChangesAsync();
 
         var token = _tokenService.GenerateToken(user);
-        return Ok(token);
+        return Ok(new { token });
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<string>> Login(LoginDto dto)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+        if (user == null)
+            return Unauthorized("Invalid email or password.");
+
+        var hasher = new PasswordHasher<User>();
+        var result = hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+
+        if (result == PasswordVerificationResult.Failed)
+            return Unauthorized("Invalid email or password.");
+
+        var token = _tokenService.GenerateToken(user);
+        return Ok(new { token });
     }
 }

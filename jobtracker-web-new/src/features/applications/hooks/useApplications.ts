@@ -1,6 +1,6 @@
 import { ChangeEvent, SubmitEvent, useEffect, useState } from 'react';
 import { Application } from '../../../types/Application';
-import { fetchApplications } from '../services/applicationService';
+import { createApplication, fetchApplications } from '../services/applicationService';
 
 export const useApplications = () => {
   const [loading, setLoading] = useState(true);
@@ -12,36 +12,32 @@ export const useApplications = () => {
     jobUrl: '',
   });
 
-  useEffect(() => {
+  const refetch = () => {
+    setLoading(true);
     fetchApplications()
       .then((data) => {
         setApplications(data);
         setLoading(false);
       })
       .catch(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    refetch();
   }, []);
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        'http://localhost:5160/api/jobapplications',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        },
-      );
-      if (response.ok) {
-        setFormData({
-          companyName: '',
-          position: '',
-          dateApplied: new Date().toISOString().split('T')[0],
-          jobUrl: '',
-        });
-        const data = await fetchApplications();
-        setApplications(data);
-      }
+      await createApplication(formData);
+      setFormData({
+        companyName: '',
+        position: '',
+        dateApplied: new Date().toISOString().split('T')[0],
+        jobUrl: '',
+      });
+      const data = await fetchApplications();
+      setApplications(data);
     } catch (error) {
       console.error('Error creating application:', error);
     }
@@ -54,5 +50,5 @@ export const useApplications = () => {
     });
   };
 
-  return { applications, loading, formData, handleSubmit, handleChange };
+  return { applications, loading, formData, handleSubmit, handleChange, refetch };
 };

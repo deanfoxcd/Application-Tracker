@@ -1,12 +1,15 @@
+using System.Security.Claims;
 using JobTracker.API.DTOs;
 using JobTracker.API.Models;
 using JobTracker.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobTracker.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class JobApplicationsController : ControllerBase
 {
     private readonly IJobApplicationService _service;
@@ -35,6 +38,7 @@ public class JobApplicationsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<JobApplication>> Create(CreateJobApplicationDto dto)
     {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var application = new JobApplication
         {
             CompanyName = dto.CompanyName,
@@ -42,7 +46,7 @@ public class JobApplicationsController : ControllerBase
             Status = dto.Status,
             DateApplied = dto.DateApplied,
             JobUrl = dto.JobUrl,
-            UserId = 1, // Temporary: will use authenticated user ID later
+            UserId = userId,
         };
 
         var created = await _service.CreateAsync(application);
