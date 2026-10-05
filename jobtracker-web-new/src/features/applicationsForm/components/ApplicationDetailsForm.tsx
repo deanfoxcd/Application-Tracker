@@ -1,13 +1,15 @@
 import { ChangeEvent, SubmitEvent } from 'react';
+import { STATUS_OPTIONS } from '../../../types/Application';
 
 interface Props {
   formData: {
     companyName: string;
     position: string;
+    status: string;
     dateApplied: string;
     jobUrl: string;
   };
-  onFormChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onFormChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onSubmit: (e: SubmitEvent) => void;
 }
 
@@ -39,6 +41,21 @@ export const ApplicationDetailsForm = ({
         onChange={onFormChange}
         required
       />
+      <select
+        className='border border-gray-300 rounded px-2 py-1'
+        name='status'
+        value={formData.status}
+        onChange={onFormChange}
+      >
+        {STATUS_OPTIONS.map((status) => (
+          <option
+            key={status}
+            value={status}
+          >
+            {status}
+          </option>
+        ))}
+      </select>
       <input
         className='border border-gray-300 rounded px-2 py-1'
         type='date'

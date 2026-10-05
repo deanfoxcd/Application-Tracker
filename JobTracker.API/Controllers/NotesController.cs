@@ -1,41 +1,59 @@
+using System.Security.Claims;
 using JobTracker.API.DTOs;
 using JobTracker.API.Models;
 using JobTracker.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobTracker.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class NotesController : ControllerBase
 {
-    private readonly INoteService _service;
+    private readonly INoteService _noteService;
+    private readonly IJobApplicationService _jobApplicationService;
 
-    public NotesController(INoteService service)
+    public NotesController(INoteService noteService, IJobApplicationService jobApplicationService)
     {
-        _service = service;
+        _noteService = noteService;
+        _jobApplicationService = jobApplicationService;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<NoteDto>>> GetAll()
     {
-        var notes = await _service.GetAllAsync();
-        var dtos = notes.Select(n => new NoteDto
-        {
-            Id = n.Id,
-            JobApplicationId = n.JobApplicationId,
-            Content = n.Content,
-            CreatedAt = n.CreatedAt,
-        });
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var myApplicationIds = (await _jobApplicationService.GetAllAsync())
+            .Where(a => a.UserId == userId)
+            .Select(a => a.Id)
+            .ToHashSet();
+
+        var notes = await _noteService.GetAllAsync();
+        var dtos = notes
+            .Where(n => myApplicationIds.Contains(n.JobApplicationId))
+            .Select(n => new NoteDto
+            {
+                Id = n.Id,
+                JobApplicationId = n.JobApplicationId,
+                Content = n.Content,
+                CreatedAt = n.CreatedAt,
+            });
         return Ok(dtos);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<NoteDto>> GetById(int id)
     {
-        var note = await _service.GetByIdAsync(id);
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var note = await _noteService.GetByIdAsync(id);
         if (note == null)
             return NotFound();
+        var application = await _jobApplicationService.GetByIdAsync(note.JobApplicationId);
+        if (application == null || application.UserId != userId)
+            return NotFound();
+
         var dto = new NoteDto
         {
             Id = note.Id,
@@ -49,9 +67,14 @@ public class NotesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<NoteDto>> Create(CreateNoteDto dto)
     {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var application = await _jobApplicationService.GetByIdAsync(dto.JobApplicationId);
+        if (application == null || application.UserId != userId)
+            return NotFound();
+
         var note = new Note { JobApplicationId = dto.JobApplicationId, Content = dto.Content };
 
-        var created = await _service.CreateAsync(note);
+        var created = await _noteService.CreateAsync(note);
         var responseDto = new NoteDto
         {
             Id = created.Id,
@@ -67,13 +90,17 @@ public class NotesController : ControllerBase
     {
         try
         {
-            var note = await _service.GetByIdAsync(id);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var note = await _noteService.GetByIdAsync(id);
             if (note == null)
+                return NotFound();
+            var application = await _jobApplicationService.GetByIdAsync(note.JobApplicationId);
+            if (application == null || application.UserId != userId)
                 return NotFound();
 
             note.Content = dto.Content;
 
-            await _service.UpdateAsync(id, note);
+            await _noteService.UpdateAsync(id, note);
             return NoContent();
         }
         catch (KeyNotFoundException)
@@ -87,7 +114,15 @@ public class NotesController : ControllerBase
     {
         try
         {
-            await _service.DeleteAsync(id);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var note = await _noteService.GetByIdAsync(id);
+            if (note == null)
+                return NotFound();
+            var application = await _jobApplicationService.GetByIdAsync(note.JobApplicationId);
+            if (application == null || application.UserId != userId)
+                return NotFound();
+
+            await _noteService.DeleteAsync(id);
             return NoContent();
         }
         catch (KeyNotFoundException)
@@ -101,7 +136,12 @@ public class NotesController : ControllerBase
         int jobApplicationId
     )
     {
-        var notes = await _service.GetByJobApplicationIdAsync(jobApplicationId);
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var application = await _jobApplicationService.GetByIdAsync(jobApplicationId);
+        if (application == null || application.UserId != userId)
+            return NotFound();
+
+        var notes = await _noteService.GetByJobApplicationIdAsync(jobApplicationId);
         var dtos = notes.Select(n => new NoteDto
         {
             Id = n.Id,

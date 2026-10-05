@@ -1,5 +1,9 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { Application, UpdateApplicationInput } from '../../../types/Application';
+import {
+  Application,
+  STATUS_OPTIONS,
+  UpdateApplicationInput,
+} from '../../../types/Application';
 
 interface Props {
   application: Application;
@@ -59,10 +63,14 @@ export const EditApplicationForm = ({ application, onSave, onCancel }: Props) =>
         value={formData.status}
         onChange={handleChange}
       >
-        <option value='Applied'>Applied</option>
-        <option value='Interviewing'>Interviewing</option>
-        <option value='Offer'>Offer</option>
-        <option value='Rejected'>Rejected</option>
+        {STATUS_OPTIONS.map((status) => (
+          <option
+            key={status}
+            value={status}
+          >
+            {status}
+          </option>
+        ))}
       </select>
       <input
         className='border border-gray-300 rounded px-2 py-1'

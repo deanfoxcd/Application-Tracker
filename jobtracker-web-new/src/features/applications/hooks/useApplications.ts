@@ -21,6 +21,7 @@ export const useApplications = () => {
   const [formData, setFormData] = useState({
     companyName: '',
     position: '',
+    status: 'Applied',
     dateApplied: getLocalDateString(),
     jobUrl: '',
   });
@@ -46,6 +47,7 @@ export const useApplications = () => {
       setFormData({
         companyName: '',
         position: '',
+        status: 'Applied',
         dateApplied: getLocalDateString(),
         jobUrl: '',
       });
@@ -56,7 +58,7 @@ export const useApplications = () => {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,

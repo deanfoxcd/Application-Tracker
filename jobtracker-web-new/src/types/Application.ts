@@ -10,9 +10,19 @@ export type Application = {
   updatedAt: string
 }
 
+export const STATUS_OPTIONS = [
+  'Applied',
+  'Saved',
+  'In Progress',
+  'Interviewing',
+  'Offer',
+  'Rejected',
+] as const;
+
 export type CreateApplicationInput = {
   companyName: string
   position: string
+  status: string
   dateApplied: string
   jobUrl?: string
 }

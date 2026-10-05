@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { Application, UpdateApplicationInput } from '../../../types/Application';
+import {
+  Application,
+  UpdateApplicationInput,
+} from '../../../types/Application';
+import { NotesSection } from '../../notes/components/NotesSection';
 import { EditApplicationForm } from './EditApplicationForm';
 
 interface ApplicationsListProps {
@@ -16,6 +20,7 @@ export const ApplicationsList = ({
   onDelete,
 }: ApplicationsListProps) => {
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const handleSave = (id: number, data: UpdateApplicationInput) => {
     onUpdate(id, data);
@@ -47,7 +52,8 @@ export const ApplicationsList = ({
               >
                 <strong>{app.companyName}</strong> - {app.position}
                 <br />
-                Status: {app.status} | Applied:{' '}
+                Status: {app.status} |{' '}
+                {app.status === 'Saved' ? 'Saved' : 'Applied'}:{' '}
                 {new Date(app.dateApplied).toLocaleDateString()}
                 {app.jobUrl && (
                   <>
@@ -71,10 +77,21 @@ export const ApplicationsList = ({
                 </button>
                 <button
                   onClick={() => onDelete(app.id)}
-                  className='text-red-500 text-sm cursor-pointer'
+                  className='text-red-500 text-sm mr-3 cursor-pointer'
                 >
                   Delete
                 </button>
+                <button
+                  onClick={() =>
+                    setExpandedId(expandedId === app.id ? null : app.id)
+                  }
+                  className='text-sm cursor-pointer text-blue-500'
+                >
+                  {expandedId === app.id ? 'Hide Notes' : 'Show Notes'}
+                </button>
+                {expandedId === app.id && (
+                  <NotesSection jobApplicationId={app.id} />
+                )}
               </li>
             ),
           )}
