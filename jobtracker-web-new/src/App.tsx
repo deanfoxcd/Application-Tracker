@@ -29,10 +29,10 @@ function App() {
   }
 
   return (
-    <div className='text-center'>
+    <div className='text-center relative'>
       <button
         onClick={logout}
-        className='float-right m-3 text-sm text-blue-500'
+        className='absolute top-3 right-3 text-sm text-blue-500'
       >
         Log out
       </button>

@@ -1,0 +1,15 @@
+# .NET build artifacts
+JobTracker.API/bin/
+JobTracker.API/obj/
+
+# Local SQLite database (no longer used, but ignore just in case)
+JobTracker.API/*.db
+JobTracker.API/*.db-shm
+JobTracker.API/*.db-wal
+
+# User-specific files
+*.user
+.vs/
+
+# macOS
+.DS_Store

@@ -46,7 +46,7 @@ public class JobApplicationsController : ControllerBase
             CompanyName = dto.CompanyName,
             Position = dto.Position,
             Status = dto.Status,
-            DateApplied = dto.DateApplied,
+            DateApplied = DateTime.SpecifyKind(dto.DateApplied, DateTimeKind.Utc),
             JobUrl = dto.JobUrl,
             UserId = userId,
         };
@@ -68,7 +68,7 @@ public class JobApplicationsController : ControllerBase
             application.CompanyName = dto.CompanyName;
             application.Position = dto.Position;
             application.Status = dto.Status;
-            application.DateApplied = dto.DateApplied;
+            application.DateApplied = DateTime.SpecifyKind(dto.DateApplied, DateTimeKind.Utc);
             application.JobUrl = dto.JobUrl;
 
             await _service.UpdateAsync(id, application);
